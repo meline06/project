@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Quiz</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+  <style>
+    .correct { color: green; }
+    .incorrect { color: red; }
+
+ </style>
+ 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  
+</head>
+<body>
+  <form id="quizForm"i>
+    <ol>
+      <li class="question-item">
+        <div>What does this code return? (<code>0 || '' || false || "Hi"</code>)</div>
+        <div>
+          <ol>
+            <li class="answer-item">
+              <label>
+                <input class="answer" type="radio" name="answer-1" value="false">
+                <code>0</code>
+              </label>
+            </li>
+            <li class="answer-item">
+              <label>
+                <input class="answer" type="radio" name="answer-1" value="true">
+                <code>"Hi"</code>
+              </label>
+            </li>
+            <li class="answer-item">
+              <label>
+                <input class="answer" type="radio" name="answer-1" value="false">
+                <code>false</code>
+              </label>
+            </li>
+            <li class="answer-item">
+              <label>
+                <input class="answer" type="radio" name="answer-1" value="false">
+                <code>''</code>
+              </label>
+            </li>
+          </ol>
+        </div>
+      </li>
+      <li class="question-item">
+        <div>What is it called when a function calls itself?</div>
+        <div>
+          <ol>
+            <li class="answer-item">
+              <label>
+                <input class="answer" type="radio" name="answer-2" value="false">
+                Inception
+              </label>
+            </li>
+            <li class="answer-item">
+              <label>
+                <input class="answer" type="radio" name="answer-2" value="false">
+                Self-Referential
+              </label>
+            </li>
+            <li class="answer-item">
+              <label>
+                <input class="answer" type="radio" name="answer-2" value="true">
+                Recursion
+              </label>
+            </li>
+            <li class="answer-item">
+              <label>
+                <input class="answer" type="radio" name="answer-2" value="false">
+                Who Cares
+              </label>
+            </li>
+          </ol>
+        </div>
+      </li>
+      <li class="question-item">
+        <div>How do you access the value of the <code>data-count</code> data attribute in JavaScript?</div>
+        <div>
+          <ol>
+            <li class="answer-item">
+              <label>
+                <input class="answer" type="radio" name="answer-3" value="true">
+                <code>element.dataset.count</code>
+              </label>
+            </li>
+            <li class="answer-item">
+              <label>
+                <input class="answer" type="radio" name="answer-3" value="false">
+                <code>element.dataAttribute.count</code>
+              </label>
+            </li>
+            <li class="answer-item">
+              <label>
+                <input class="answer" type="radio" name="answer-3" value="false">
+                <code>element.dataset.dataCount</code>
+              </label>
+            </li>
+            <li class="answer-item">
+              <label>
+                <input class="answer" type="radio" name="answer-3" value="false">
+                <code>element.dataCount</code>
+              </label>
+            </li>
+          </ol>
+        </div>
+      </li>
+    </ol>
+    <button type="submit">submit</button>
+    
+  </form>
+  <script>
+    document.getElementById('quizForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Empêche la soumission du formulaire
+  
+      var questions = document.getElementsByClassName('question-item');
+      var correctCount = 0;
+  
+      for (var i = 0; i < questions.length; i++) {
+        var questionContainer = questions[i];
+  
+        // Réinitialise la couleur de la question
+        questionContainer.classList.remove('correct', 'incorrect');
+  
+        var answers = questionContainer.querySelectorAll('input[type="radio"]');
+        for (var j = 0; j < answers.length; j++) {
+            // Réinitialise la couleur des réponses
+          answers[j].parentElement.parentElement.parentElement.classList.remove('correct', 'incorrect');
+        }
+  
+        var correctAnswer = questionContainer.querySelector('input[type="radio"][value="true"]');
+        if (correctAnswer.checked) {
+          correctCount++;
+          // Marque la question comme correcte si la bonne réponse est sélectionnée
+          questionContainer.classList.add('correct');
+          correctAnswer.parentElement.parentElement.parentElement.classList.add('correct');
+        } else {
+          var incorrectAnswers = questionContainer.querySelectorAll('input[type="radio"][value="false"]');
+          for (var k = 0; k < incorrectAnswers.length; k++) {
+            //marque les qestions sans reponses comme incorrectes
+            questionContainer.classList.add('incorrect');
+              incorrectAnswers[k].parentElement.parentElement.parentElement.classList.add('incorrect');
+            if (incorrectAnswers[k].checked) {
+                // Marque la réponse incorrecte si sélectionnée
+              questionContainer.classList.add('incorrect');
+              incorrectAnswers[k].parentElement.parentElement.parentElement.classList.add('incorrect');
+            }
+          }
+        }
+      }
+  
+      const oldResults = document.getElementById('quizResults');
+        if (oldResults) {
+            // Supprime les anciens résultats s'ils existent
+            oldResults.remove(); 
+        }
+
+        const results = document.createElement('div');
+        // Styles pour afficher les résultats
+        results.id = 'quizResults';
+        results.style.padding = '80px';
+        results.style.position = 'absolute';
+        results.style.top = '70%';
+        results.style.left = '40%';
+        results.style.transform = 'translate(-50%, -50%)';
+        results.style.textAlign = 'center';
+        results.style.backgroundColor = '#fff'; // Ajoutez la couleur de fond désirée
+        results.style.top = '50%'; // Position verticale au milieu de la page
+        results.style.transform = 'translateY(-60%)'; // Centrage vertical
+
+        if (correctCount === questions.length) {
+            // Affiche le message de félicitations si toutes les réponses sont correctes
+            results.innerHTML =
+                '<h2>Congratulations!! You got them all right </h2><img src="https://media.istockphoto.com/id/1287458193/vector/party-popper-icon-isolated-party-popper-symbol-vector.jpg?s=612x612&w=0&k=20&c=O2hpxLRG2Fk-vTnf5_Px47MywxQBh13yXy5MmlqxXqk=" alt="Badge" style="max-width: 150px; height: auto;">';
+        } else {
+            // Affiche un message d'échec sinon
+            results.innerHTML =
+                '<h2>Ops! Try again </h2><img src="https://static.vecteezy.com/ti/vecteur-libre/p1/5095666-ooops-lettrage-main-texte-ecrit-a-la-main-pour-erreur-inconvenient-desole-effet-son-element-de-conception-pour-banniere-carte-web-affiche-affiche-publicite-autocollant-annonce-vectoriel.jpg" alt="Badge" style="max-width: 150px; height: auto;">';
+        }
+        // Ajoute les résultats à la fin du corps de la page
+        document.body.appendChild(results);
+    });
+  </script> 
+</body>
+</html>
